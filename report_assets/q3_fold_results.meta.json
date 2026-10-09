@@ -1,0 +1,166 @@
+{
+ "fingerprint": "4e389bd5c62e76ea15015db089fdce9f6d4334ca48b7b89414a532e5ea6b79e7",
+ "settings": {
+  "seed": 42,
+  "n_outer": 5,
+  "n_inner": 3,
+  "buffer": 144,
+  "svr_thin": 8,
+  "groups": {
+   "temporal": [
+    "hour",
+    "dayofweek"
+   ],
+   "indoor": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "T8",
+    "T9",
+    "RH_1",
+    "RH_2",
+    "RH_3",
+    "RH_4",
+    "RH_5",
+    "RH_7",
+    "RH_8",
+    "RH_9"
+   ],
+   "outdoor": [
+    "T6",
+    "RH_6",
+    "T_out",
+    "RH_out",
+    "Press_mm_hg",
+    "Windspeed",
+    "Visibility",
+    "Tdewpoint"
+   ],
+   "indoor_outdoor": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "T8",
+    "T9",
+    "RH_1",
+    "RH_2",
+    "RH_3",
+    "RH_4",
+    "RH_5",
+    "RH_7",
+    "RH_8",
+    "RH_9",
+    "T6",
+    "RH_6",
+    "T_out",
+    "RH_out",
+    "Press_mm_hg",
+    "Windspeed",
+    "Visibility",
+    "Tdewpoint"
+   ],
+   "combined": [
+    "hour",
+    "dayofweek",
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "T8",
+    "T9",
+    "RH_1",
+    "RH_2",
+    "RH_3",
+    "RH_4",
+    "RH_5",
+    "RH_7",
+    "RH_8",
+    "RH_9",
+    "T6",
+    "RH_6",
+    "T_out",
+    "RH_out",
+    "Press_mm_hg",
+    "Windspeed",
+    "Visibility",
+    "Tdewpoint"
+   ],
+   "rv1": [
+    "rv1"
+   ],
+   "random_20": [
+    "random_01",
+    "random_02",
+    "random_03",
+    "random_04",
+    "random_05",
+    "random_06",
+    "random_07",
+    "random_08",
+    "random_09",
+    "random_10",
+    "random_11",
+    "random_12",
+    "random_13",
+    "random_14",
+    "random_15",
+    "random_16",
+    "random_17",
+    "random_18",
+    "random_19",
+    "random_20"
+   ]
+  },
+  "models": {
+   "GBM": [
+    "HistGradientBoostingRegressor(max_iter=150, max_leaf_nodes=15, random_state=42)",
+    {
+     "model__learning_rate": [
+      0.05,
+      0.1
+     ]
+    }
+   ],
+   "RF": [
+    "RandomForestRegressor(max_features=0.5, max_samples=0.5, n_estimators=80,\n                      n_jobs=-1, random_state=42)",
+    {
+     "model__min_samples_leaf": [
+      10,
+      40
+     ]
+    }
+   ],
+   "SVR": [
+    "SVR()",
+    {
+     "model__C": [
+      1,
+      10
+     ]
+    }
+   ],
+   "XGB": [
+    "XGBRegressor(base_score=None, booster=None, callbacks=None,\n             colsample_bylevel=None, colsample_bynode=None,\n             colsample_bytree=None, device=None, early_stopping_rounds=None,\n             enable_categorical=True, eval_metric=None, feature_types=None,\n             feature_weights=None, gamma=None, grow_policy=None,\n             importance_type=None, interaction_constraints=None,\n             learning_rate=0.1, max_bin=None, max_cat_threshold=None,\n             max_cat_to_onehot=None, max_delta_step=None, max_depth=None,\n             max_leaves=None, min_child_weight=None, missing=nan,\n             monotone_constraints=None, multi_strategy=None, n_estimators=150,\n             n_jobs=-1, num_parallel_tree=None, ...)",
+    {
+     "model__max_depth": [
+      3,
+      6
+     ]
+    }
+   ]
+  },
+  "abt_shape": [
+   19735,
+   55
+  ],
+  "abt_hash": "56b60281b23eaee8ee87c35d7734810d61cac8708ed8b215533a2b9863a23db2"
+ }
+}

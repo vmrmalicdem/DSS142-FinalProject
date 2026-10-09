@@ -1,0 +1,6 @@
+step,action,detail
+1,hidden-missing scan,text->NaN: 0; inf->NaN: 0
+2,"drop rv2, lights",rv2 identical to rv1 (rv1 kept); lights is another metered load
+2,flags,RH_6<10.0; RH_5>66.058 (Q3+1.5*IQR); Appliances>576.6 (P99)
+3,exclude missing target,0 rows
+3,repair missing inputs,"0 cells (time interpolation, limit 6; ffill/bfill fallback)"

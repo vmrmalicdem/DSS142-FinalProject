@@ -1,0 +1,39 @@
+{
+  "input_file": "energydata_complete.csv",
+  "run_timestamp": "2026-10-09T16:04:38",
+  "random_seed": 42,
+  "rows": 19735,
+  "columns": 55,
+  "rows_read": 19735,
+  "rows_excluded_missing_target": 0,
+  "date_start": "2016-01-11 17:00:00",
+  "date_end": "2016-05-27 18:00:00",
+  "targets": {
+    "original": "Appliances",
+    "capped": "Appliances_p99cap",
+    "log1p": "log1p_Appliances",
+    "log1p_capped": "log1p_Appliances_p99cap"
+  },
+  "thresholds": {
+    "rh6_low": 10.0,
+    "bathroom_fence": 66.05833333333325,
+    "tukey_k": 1.5,
+    "cap_quantile": 0.99,
+    "cap_value": 576.5999999999985,
+    "interp_limit": 6
+  },
+  "feature_group_names": [
+    "identifiers_time",
+    "target_original",
+    "target_derivatives",
+    "diagnostic_flags",
+    "calendar_features",
+    "physical_measurements",
+    "negative_control_rv1",
+    "random_diagnostic"
+  ],
+  "dropped_columns": [
+    "rv2",
+    "lights"
+  ]
+}

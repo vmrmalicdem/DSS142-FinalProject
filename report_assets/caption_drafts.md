@@ -1,0 +1,3 @@
+**Figure 1.** Threshold regression of log1p(Appliances) on the three sensors with the smallest Holm-adjusted p-values (ties broken by the sup-F statistic). Points are mean log energy within 40 quantile bins; the red line is the fitted threshold model; the shaded band is the 95% block-bootstrap CI of the breakpoint. The panel title states whether the threshold met all five support criteria. Associations only.
+
+**Figure 2.** Out-of-sample R2 (log1p scale) for each feature group and model on identical contiguous time blocks with a 1-day buffer. Bars are means across blocks, whiskers the range; the grey band spans the R2 reached by rv1 and the 20 random columns. Values express incremental predictive value, not causal or uniquely attributable variance.
