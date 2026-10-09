@@ -1,5 +1,5 @@
 model,null_max_fold_r2,real_groups_above_null,real_groups_not_above_null
-GBM,0.00038121261207946233,['temporal'],"['indoor', 'outdoor', 'indoor_outdoor', 'combined']"
-RF,-0.003506321977682303,"['temporal', 'outdoor', 'combined']","['indoor', 'indoor_outdoor']"
-SVR,-0.00044329854586155903,"['temporal', 'indoor', 'indoor_outdoor', 'combined']",['outdoor']
-XGB,-0.0018353554596424182,['temporal'],"['indoor', 'outdoor', 'indoor_outdoor', 'combined']"
+GBM,0.0003812126120794,['temporal'],"['indoor', 'outdoor', 'indoor_outdoor', 'combined']"
+RF,-0.0035063219776823,"['temporal', 'outdoor', 'combined']","['indoor', 'indoor_outdoor']"
+SVR,-0.0004432985458615,"['temporal', 'indoor', 'indoor_outdoor', 'combined']",['outdoor']
+XGB,-0.0018353554596424,['temporal'],"['indoor', 'outdoor', 'indoor_outdoor', 'combined']"
