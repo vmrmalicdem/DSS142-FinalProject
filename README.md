@@ -19,9 +19,16 @@ DSS142-FinalProject/
 ├── report_assets/               # Precomputed CV evaluation tables, figure exports & markdown tables
 │   ├── q3_fold_results.csv      # Out-of-sample CV metrics across 5 outer folds & all feature groups
 │   ├── q3_fold_results.meta.json# SHA-256 fingerprint validation for cache verification
+│   ├── r2_table.csv             # Summary R² table (includes exploratory HourMean & Ridge baselines)
+│   ├── threshold_table.csv      # Q2 hinge test results (crossing-freq. cols empty = null result)
+│   ├── q1_bands.csv
+│   ├── q3_negative_control.csv
+│   ├── caption_drafts.md        # Figure captions with Q2 & Q3 headline conclusions
 │   ├── fig1_thresholds.png
 │   └── fig2_r2.png
-├── requirements.txt             # Environment dependencies
+├── docs/
+│   └── sensor_map.md            # Sensor-to-room mapping (T1–T9, RH_1–RH_9) with outdoor flags
+├── requirements.txt             # Exact environment dependencies (pinned versions)
 └── README.md
 ```
 
@@ -41,14 +48,14 @@ Execute the notebooks in numerical order:
 
 1. **`01_source_to_abt.ipynb`**
    - Ingests raw data and validates monotonic 10-minute cadence.
-   - Applies domain cleaning (e.g., Tukey fence clipping on bathroom humidity `RH_5`, zero-variance drops).
-   - Generates negative controls (`rv1` permuted, 20 synthetic gaussian noise features).
+   - Applies domain cleaning (e.g., Tukey fence **flagging** on bathroom humidity `RH_5`; no zero-variance drops occurred in this dataset).
+   - Generates negative controls (`rv1` — the **original** random variable column, kept unchanged — plus 20 synthetic Gaussian noise features).
    - Exports the frozen Analytical Base Table (ABT) to `abt_outputs/`.
    - **Runtime:** ~10–20 seconds.
 
 2. **`02_abt_to_models.ipynb`**
    - Consumes the frozen ABT (read-only; no data leakage).
-   - **Q1:** Block bootstrap Spearman correlation with appliances log energy.
+   - **Q1:** Band ratio analysis — compares mean log energy in each environmental band against the typical band, with block-bootstrap confidence intervals. (Spearman correlation appears only in an exploratory heatmap and is not bootstrapped.)
    - **Q2:** Broken-line threshold test with F-statistic and Holm-Bonferroni correction.
    - **Q3:** 5-fold nested blocked cross-validation across 4 model families (GBM, RF, SVR, XGB).
    - **Runtime:** ~2–3 minutes with cache (`RECOMPUTE_Q3 = False`).
@@ -76,4 +83,35 @@ Execute the notebooks in numerical order:
 - **Kernel SVR Thinning (`SVR_THIN = 8`):**  
   Because kernel Support Vector Regression has $O(n^2)$ time/memory complexity, SVR trains on every 8th consecutive training record (~1,940 samples per fold). Systematic thinning preserves seasonal and daily representation while keeping cross-validation computationally tractable.
 - **Outlier Handling on RH_5:**  
-  Bathroom humidity (`RH_5`) is clipped using a global Tukey fence ($1.5 \times \text{IQR}$). As noted in the analysis, this is a non-local filter chosen because bathroom humidity spikes are brief and shower-driven.
+  Bathroom humidity (`RH_5`) is **flagged** (not clipped) using a global Tukey fence ($1.5 \times \text{IQR}$). The ABT retains the original values; the flag is used only in sensitivity runs. This is a non-local filter chosen because bathroom humidity spikes are brief and shower-driven.
+
+---
+
+## 📊 Key Findings
+
+### Q1 — Typical Ranges
+Band ratio analysis found 17 of 72 sensor-band comparisons with block-bootstrap intervals excluding 1.0. This is descriptive evidence only; it does not control for time-of-day or season, and multiple-comparison correction was not applied (approximately 4 of the 17 would be expected by chance at α = 0.05).
+
+### Q2 — Environmental Thresholds
+The broken-line hinge test found **0 of 36** sensor–direction pairs with a supported energy threshold under strict criteria (significant after Holm correction, positive slope, interior breakpoint, ≥5% data past the threshold, *and* significant after hour-of-day control). The hour-of-day control is decisive: 6 pairs that passed criteria 1–4 all became non-significant once hour was controlled. The test can only detect kinks of roughly 56% energy change (range 15–92%), so "no thresholds found" does not mean "no thresholds exist."
+
+The crossing-frequency columns in `report_assets/threshold_table.csv` (`crossings_into_elevated`, `crossings_out`, `crossings_total`, `per_1000_transitions`, `per_day`, `pct_time_elevated`) are only populated for supported thresholds. Because 0 pairs met all criteria, these columns are empty — this is the correct and expected output.
+
+### Q3 — Temporal vs Environmental Variance
+Under strict time-blocked cross-validation:
+- **Temporal features win clearly** for tree-based models (GBM, RF): mean R² ≈ 0.243–0.248.
+- **Environmental features alone are at or below the noise level** for GBM and XGB; SVR is the exception (R² ≈ 0.138).
+- **Adding environment to time does not improve tree models** (combined ≈ −0.003 to +0.04 vs. temporal alone ≈ 0.245).
+- **The finding is model-dependent**: SVR shows a small positive incremental contribution from environment (+0.070), while tree models do not.
+- A simple **hour-of-day mean baseline achieves R² ≈ 0.241**, matching the three tree models. A **Ridge regression on time + sensors reaches R² ≈ 0.302** (+0.057 over time alone, positive in all 5 folds).
+- **No champion model is named**: results are inconclusive for ranking models given the large fold-to-fold variance and the fact that simple baselines match the complex models.
+
+---
+
+## ⚠️ Known Limitations
+
+- **XGBoost instability**: XGBoost results vary across library versions and machines (observed range: −0.458 to −0.335 for the `indoor` group). `requirements.txt` pins minimum versions only. XGBoost is retained to compare four model families; its variance reflects real sensitivity to the test-block range shift, not a bug.
+- **Test-block range shift**: Outdoor temperature rises from ~4 °C (January) to ~14 °C (May). The first and last cross-validation blocks therefore contain 11–12% of rows outside the training feature range. This likely drives the negative R² values seen for environmental-only groups on those folds.
+- **SVR data thinning**: SVR trains on ≈12.5% of training rows per fold. If anything this handicaps SVR; a positive environment contribution in SVR therefore provides a lower bound, not an upper bound.
+- **Q3 side analysis is exploratory**: The baselines, Ridge, and de-seasonalised sensor models (NB2 cells 53–55) re-use the same test blocks after seeing main results and should be interpreted as exploratory.
+

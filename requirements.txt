@@ -1,6 +1,9 @@
-numpy >= 2.5.0
-pandas >= 3.0.3
-matplotlib >= 3.11.2
-scikit-learn >= 1.9.1
-xgboost >= 3.4.1
-ipykernel >= 7.3.0
+# Exact versions used to produce all report_assets/ outputs.
+# Re-running with different versions — especially xgboost — may produce
+# different fold-level R² values. See README Known Limitations.
+numpy==2.5.4
+pandas==3.0.6
+matplotlib==3.11.2
+scikit-learn==1.9.1
+xgboost==3.4.1
+ipykernel==7.4.0

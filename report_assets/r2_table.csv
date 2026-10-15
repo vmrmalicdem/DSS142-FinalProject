@@ -27,6 +27,8 @@ XGB,outdoor,-0.1739584737401697,-0.9306618664377286,0.0661531524165477,out-of-sa
 XGB,random_20,-0.025614635345402557,-0.0393694398405402,-0.0152089387651022,out-of-sample R2
 XGB,rv1,-0.01401170228408998,-0.0341795495663534,-0.0012142626072335,out-of-sample R2
 XGB,temporal,0.24589527687453322,0.1431641719823483,0.3049605666459679,out-of-sample R2
+HourMean,temporal,0.241,,,exploratory_baseline (NB2 cell 54; same test blocks — interpret as exploratory)
+Ridge,combined,0.302,,,exploratory_baseline (NB2 cell 55; time + raw sensors; positive in 5/5 folds — interpret as exploratory)
 GBM,combined - temporal,-0.24569260665559725,-1.093824430211018,0.010523781802211307,incremental
 GBM,combined - environment,0.11191065729524503,-0.16798052831098786,0.38073415744285527,incremental
 GBM,unique to temporal,0.11191065729524503,-0.16798052831098786,0.38073415744285527,incremental
